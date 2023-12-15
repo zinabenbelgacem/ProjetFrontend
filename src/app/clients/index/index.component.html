@@ -1,0 +1,162 @@
+<div>
+<div class="container">
+    <div class="container" style="text-align: center;">
+        <h2  style="color: #1127e9d8; font-family: Arial, sans-serif; margin-top: 750px;font-size: xx-large;">Liste des Clients</h2>
+
+    </div>
+
+    <div >
+        <app-create></app-create>
+    </div>
+    <br/>
+<div>
+    <div class="container">
+        <label for="clientId"> Client </label>
+        <input type="number" id="clientId" [(ngModel)]="clientId" name="clientId">
+        <button (click)="getChiffreAffairesGlobal()">Obtenir chiffre d'affaires global</button>
+      </div>
+      
+      <div class="container">
+        <label for="annee">Année </label>
+        <input type="number" id="annee" [(ngModel)]="annee" name="annee">
+        <button (click)="getChiffreAffairesAnnee()">Obtenir chiffre d'affaires par année</button>
+    </div>    
+    <div style="color: rgb(20, 19, 19); font-weight: bold; font-size: large;">
+        Chiffre d'affaires global :
+      <span *ngIf="chiffreAffairesGlobal !== undefined" style="color: rgb(247, 9, 9); font-weight: bold;">
+         {{ chiffreAffairesGlobal }} DT  <i class="fas fa-money-bill"></i> 
+    </span>  
+    </div>
+
+      <div style="color: rgb(20, 19, 19); font-weight: bold; font-size: large;">
+        Chiffre d'affaires pour l'année spécifiée :
+      <span *ngIf="chiffreAffairesAnnee !== undefined" style="color: rgb(247, 9, 9); font-weight: bold;">
+         {{ chiffreAffairesAnnee }} DT  <i class="fas fa-money-bill"></i> 
+      </span>  
+    </div>      
+      <br/>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Code </th>
+                <th>Nom </th>
+                <th>Prenom </th>
+                <th> Actif </th>
+                <th>Adresse </th>
+                <th>Telephone </th>
+                <th>Email</th>
+                <th width="250px">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let client of clients.data">              
+                <td>{{ client.codecl }}</td>
+                <td>{{ client.nom }}</td>
+                <td>{{ client.prenom }}</td>
+                <td>{{ client.actif }}</td> 
+                <td>{{ client.adresse }}</td>
+                <td>{{ client.tel }}</td>
+                <td>{{ client.email }}</td>
+                <td>
+                    <div *ngIf="showView">
+                        <app-view *ngIf="selectedClientId === getClientIdAsNumber(client.idClient)" [idClient]="client.idClient"></app-view>
+                    </div>   
+                    <div style="display: flex;">
+                        <button class="action-button" [routerLink]="['/clients', '' + client.idClient, 'edit']" class="btn btn-default" style="margin-right: 10px; min-width: 100px; color: #fff; background-color: #4caf50;">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                
+                        <button class="action-button" type="button" (click)="deleteClient(client.idClient)" class="btn btn-default" style="margin-right: 20px; min-width: 100px; background-color: #a04545;">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="container">
+        <div>
+            <label for="clientId">Client </label>
+            <input type="number" id="clientId" [formControl]="clientIdFormControl" />
+        
+        <div > 
+            <h3>Factures Réglées</h3>
+            <table class="table table-striped" *ngIf="facturesReglees && facturesReglees.length > 0">
+                <thead>
+                    <tr>
+                        <th>Numéro</th>
+                        <th>Facture</th>
+                        <th>Date Facture</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let invoice of facturesReglees">
+                        <td>{{ invoice.num }}</td>
+                        <td>{{ invoice.idFact }}</td>
+                        <td>{{ invoice.dateFact }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="!facturesReglees || facturesReglees.length === 0">
+                <p>Aucune facture réglée trouvée.</p>
+            </div>
+        </div>
+        <div>
+            <h3>Factures Non Réglées</h3>
+            <table class="table table-striped" *ngIf="facturesNonReglees && facturesNonReglees.length > 0">
+                <thead>
+                    <tr>
+                        <th>Numéro</th>
+                        <th>Facture</th>
+                        <th>Date Facture</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let unpaidInvoice of facturesNonReglees">
+                        <td>{{ unpaidInvoice.num }}</td>
+                        <td>{{ unpaidInvoice.idFact }}</td>
+                        <td>{{ unpaidInvoice.dateFact }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="!facturesNonReglees || facturesNonReglees.length === 0">
+                <p>Aucune facture non réglée trouvée.</p>
+            </div>
+        </div>     
+        <h3>Produits les plus achetés par le client :</h3>
+        <div *ngIf="mostPurchasedProducts && Object.keys(mostPurchasedProducts).length > 0">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let key of sortedProductsByQuantity">
+                        <ng-container *ngIf="mostPurchasedProducts[key] !== null && mostPurchasedProducts[key] > 0">
+                            <tr>
+                                <td>{{ key }}</td>
+                                <td>{{ mostPurchasedProducts[key] }}</td>
+                            </tr>
+                        </ng-container>
+                    </ng-container>
+                </tbody>
+            </table>
+            <div *ngIf="!hasPurchasedProductsWithQuantity()">
+                <p>Aucun produit acheté par ce client.</p>
+            </div>
+        </div>        
+            <div style="color: rgb(20, 19, 19); font-weight: bold; font-size: x-large;">
+                Reste global des montants non payés pour le client :
+                <span *ngIf="resteGlobalMontantsNonPayes !== undefined" style="color: rgb(247, 9, 9); font-weight: bold;">
+                  {{ resteGlobalMontantsNonPayes }} DT   <i class="fas fa-money-bill"></i> 
+                </span>
+            </div>               
+    </div>
+    <router-outlet></router-outlet>
+
+</div> 
+ 
+</div>
+

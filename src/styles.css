@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import "~filepond/dist/filepond.min.css";
+@import "~filepond/dist/filepond.min.css";
+
+@import "~filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+@import "~filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+.custom-link {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #337AB7;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #F0F0F0;
+    transition: background-color 0.3s;
+}
+
+.custom-link:hover {
+    background-color: #337AB7;
+    color: #FFFFFF;
+}
+

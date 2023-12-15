@@ -1,0 +1,67 @@
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" (click)="openModal()"style="background-color: rgb(72, 69, 247); border: 1px solid #ccc;">
+    <i class="bi bi-plus-circle-fill"></i>
+    Nouveau Client
+</button>
+
+<!-- Modal -->
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display': display}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Ajout Client</h4>
+                <button type="button" class="btn btn-default" aria-label="Close" (click)="closeModal()"style="margin-right: 10px; color: #fff; background-color: #a04545;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ng-container *ngTemplateOutlet="formEditeur"></ng-container>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" (click)="closeModal()"style="margin-right: 10px;   min-width: 100px; color: #fff; background-color: #a04545;">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #formEditeur>
+    <form (ngSubmit)="addClient()">
+        <div class="mb-3">
+                  <div>
+                <label class="form-label">Statut :</label>
+                <input type="text" class="form-control" id="statut" name="statut" placeholder="statut de client" [(ngModel)]="clients.actif">
+            </div>
+                <div>
+                    <label for="code" class="form-label"> Code </label>
+                    <input type="text" class="form-control" id="code" name="code" placeholder="code de client" [(ngModel)]="clients.codecl">
+                   </div> 
+              <div>
+                 <label for="nom" class="form-label"> Nom </label>
+                 <input type="text" class="form-control" id="nom" name="nom" placeholder="Nom de client" [(ngModel)]="clients.nom">
+               </div> 
+
+        <div class="mb-3">
+            <label for="prenom" class="form-label"> Prenom </label>
+            <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Prenom de client" [(ngModel)]="clients.prenom">
+        </div>
+
+        <div class="mb-3">
+            <label for="adresse" class="form-label"> Adresse </label>
+            <input type="text" class="form-control" id="adresse" name="adresse" placeholder="Adresse  de client " [(ngModel)]="clients.adresse">
+        </div>
+       
+        <div class="mb-3">
+            <label for="telephone" class="form-label"> Telephone </label>
+            <input type="number" class="form-control" id="telephone" name="telephone" placeholder="Telephone  de client " [(ngModel)]="clients.tel">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label"> Email </label>
+            <input type="email" class="form-control" id="adresse" name="adresse" placeholder="Email  de client " [(ngModel)]="clients.email">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-success"  (clic)="addClient()" >Enregistrer</button>
+
+        </div>
+        </div>
+    </form>
+</ng-template>
